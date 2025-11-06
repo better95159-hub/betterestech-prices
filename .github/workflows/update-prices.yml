@@ -1,0 +1,24 @@
+name: Update Prices JSON Daily
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at 00:00 UTC (5:30 AM IST)
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  update-prices:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Fetch prices from WordPress
+        run: |
+          curl -o prices.json "https://betterestech.unaux.com/wp-admin/admin-ajax.php?action=generate_prices_json"
+      
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add prices.json
+          git commit -m "Auto-update prices - $(date)" || exit 0
+          git push
