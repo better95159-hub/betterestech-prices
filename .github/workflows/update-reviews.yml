@@ -2,8 +2,8 @@ name: Update Reviews JSON Daily
 
 on:
   schedule:
-    - cron: '0 1 * * *'  # 6:30 AM IST (1 hour after prices)
-  workflow_dispatch:  # Manual trigger
+    - cron: '0 1 * * *'  # 6:30 AM IST
+  workflow_dispatch:
 
 jobs:
   update-reviews:
@@ -25,3 +25,8 @@ jobs:
           git add reviews.json
           git commit -m "Auto-update reviews - $(date)" || exit 0
           git push
+      
+      - name: Purge jsDelivr Cache
+        run: |
+          sleep 30
+          curl -X POST "https://purge.jsdelivr.net/gh/better95159-hub/betterestech-uploads@main/reviews.json"
