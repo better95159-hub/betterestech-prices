@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          repository: better95159-hub/betterestech-uploads
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Fetch reviews from WordPress
         run: |
